@@ -1,135 +1,179 @@
-🏥 Doctor & Clinic App - System Architecture
+# 🩺 Doctor Appointment App (Role-Based Access)
 
-A full-stack mobile-first healthcare application tailored for Patients, Doctors, and Super Admins to streamline medical appointment bookings, prescription handling, and report tracking.
+A powerful, cross-platform mobile app built for doctors and patients. Users can sign up as **Doctor** or **Patient** and experience a fully role-based system for healthcare management, appointment booking, prescriptions, and consultations — all in one app.
 
-This project leverages React Native (CLI), React / Next.js, and Firebase to simulate a real-world healthcare ecosystem, built with best practices in frontend-backend integration, authentication, and scalable architecture.
+## 🚀 Features Overview
 
+### 🔐 Role-Based Access
+- One unified app
+- Users select a role on login: **Doctor** or **Patient**
+- Different dashboards, permissions & UI per role
 
-🎓 Project Purpose
+## 👨‍⚕️ Doctor Features
 
-This educational initiative is designed to:
+| Feature                   | Description                                           |
+|---------------------------|-------------------------------------------------------|
+| 🗓️ View Appointments       | View upcoming, pending, and completed appointments     |
+| 📅 Set Availability        | Define working hours and time slots                   |
+| 👤 Patient Records         | View medical history and visit details                 |
+| 💊 Upload Prescriptions    | Digitally send prescriptions to patients              |
+| ✏️ Edit Profile            | Update bio, fees, image, and specialization           |
+| ✅ Accept/Reject Bookings  | Approve or reject appointment requests                |
+| ⭐ View Ratings & Reviews  | See patient feedback after consultations              |
 
-- Explore advanced frontend frameworks (React Native CLI, React, Next.js)
-- Implement real-world backend services using Firebase
-- Understand multi-role workflows and app infrastructure
-- Practice UI/UX design patterns, form validation, and auth flows
-- Develop scalable, modular, and maintainable project structure
+## 👤 Patient Features
 
+| Feature                   | Description                                           |
+|---------------------------|-------------------------------------------------------|
+| 🔍 Search Doctors          | Filter by name, specialty, or rating                  |
+| 📅 Book Appointments       | Select doctor, choose time, and book                 |
+| 🧾 View Prescriptions      | View/download prescription given by doctor           |
+| 🕒 Appointment History     | See past and upcoming appointments                   |
+| ⭐ Leave Reviews           | Give feedback & rate the doctor                      |
+| ✏️ Edit Profile            | Manage personal info and update profile              |
+| 💳 Payment (future)        | Online fee payment option *(optional)*               |
 
-🔧 System Overview
+## 🛠️ Tech Stack
 
-| 🧩 Module       | 💻 Platform          | 👥 Role              |
-|----------------|----------------------|----------------------|
-| 📱 Mobile App   | React Native (CLI)   | Patients only        |
-| 🖥️ Admin Panel  | React.js / Next.js   | Doctors & Super Admin|
-| 🔙 Backend / DB | Firebase (Auth, Firestore, Storage, Functions) | Core Services |
+| Layer         | Technology                         |
+|---------------|-------------------------------------|
+| Frontend      | React Native CLI                    |
+| Auth          | Firebase Authentication             |
+| Backend       | Firebase Firestore (NoSQL DB)       |
+| Media Upload  | Firebase Storage                    |
+| Video Call    | WebRTC + Socket.IO                  |
+| Notifications | Firebase Cloud Messaging (FCM)      |
+| Admin Panel   | React JS + Tailwind CSS *(optional)*|
 
+## 📬 Push Notifications
 
-📱 Patient App – React Native
+Push notifications are implemented using **Firebase Cloud Messaging (FCM)** to ensure real-time communication between the app and users.
 
-👤 Users: Patients Only  
-📦 Tech Stack: React Native CLI, Firebase, React Navigation, FCM, Expo Notifications
+### 🔔 Key Highlights:
+- Firebase Cloud Messaging (FCM) integrated
+- Role-based notification logic (Doctor vs Patient)
+- Triggered automatically via Firestore triggers or manually via admin
 
-✅ Core Screens & Features
+### 🔔 Notifications Sent For:
+- ✅ **Booking Confirmation** – when a user books an appointment
+- ⏰ **Upcoming Appointment Reminder** – alert before appointment
+- 🌟 **New Review Received** – doctor notified after feedback
+- 💊 **New Prescription Uploaded** – patient notified instantly
 
-| 🧾 Screen         | 🧩 Features                          | 📁 Firebase Collection |
-|------------------|--------------------------------------|------------------------|
-| Login/Register   | Email, Google, OTP login             | `/users`              |
-| Home             | View Specializations & Top Doctors   | `/doctors`            |
-| Book Appointment | Select Doctor, Date & Time           | `/appointments`       |
-| My Appointments  | View booked, upcoming & cancelled    | `/appointments`       |
-| Upload Reports   | Upload image or PDF reports          | `/reports`            |
-| My Prescriptions | View prescriptions from doctors      | `/prescriptions`      |
-| Notifications    | Real-time updates via FCM            | `/notifications`      |
-| Profile          | Update basic information             | `/users`              |
+## 🎥 Real-Time Video & Audio Calls
 
-🎁 Bonus Features (Optional)
-- 🌙 Dark Mode with theme switching  
-- ⏰ Appointment Reminders  
-- 🌟 Patient Reviews & Ratings  
+Real-time consultation is powered by **WebRTC** and **Socket.IO**, allowing live audio/video communication between doctors and patients.
 
+### 🎯 Core Functionality:
+- 1-on-1 live video consultation
+- Seamless real-time communication
+- Socket.IO used for signaling and connection setup
 
-🖥️ Admin Panel – React.js / Next.js
+### 🛠️ Future Capabilities:
+- 🧑‍🤝‍🧑 **Group Video Calls**
+- 📤 **Screen Sharing**
+- 📲 **Consultation Recording (Premium Version)**
 
-👨‍⚕️ Doctor Dashboard
+## 🔒 Authentication & Security
 
-| Feature                    | Description                                   |
-|----------------------------|-----------------------------------------------|
-| Login/Register             | Firebase Auth (role = "doctor")              |
-| My Appointments            | Filter by date, time, and patient            |
-| Mark Appointment Complete  | Set status: Done / Cancel / No-show          |
-| Add Prescription           | Input notes, medicines, and upload files     |
-| View Patient History       | Access past reports and prescriptions        |
-| Manage Availability        | Set/edit weekly calendar slots               |
-| Profile Update             | Modify name, photo, and specialization       |
+Authentication and role management are securely handled using **Firebase Authentication** and **Firestore Security Rules**.
 
+### 🔐 Auth Flow:
+- Firebase Email/Password based login/signup
+- Role (`doctor` or `patient`) is saved in Firestore upon registration
+- Role-based navigation and access controlled from app side
 
-🛡️ Super Admin Dashboard
+### 🔐 Firestore Rules:
+- Read/write access strictly filtered by user `uid` and `role`
+- Example: Patient can't read other patients' prescriptions
 
-| Feature                    | Description                                    |
-|----------------------------|------------------------------------------------|
-| View All Doctors           | Approve or reject new doctor registrations     |
-| View Patients List         | Block or report patients                       |
-| Specialization Manager     | Add, edit, or delete medical categories        |
-| Reports & Stats            | Weekly reports, active doctors, metrics       |
+### 🔐 Device Permissions:
+- **Camera/Mic Access** – Required only during video calls
+- **Secure Prompting** – OS-native permission request handled safely
 
+## 📌 Future Enhancements
 
-🔙 Firebase Backend Structure
+| Feature                        | Description                                      |
+|-------------------------------|--------------------------------------------------|
+| 💬 In-App Chat                 | Real-time messaging between doctor & patient     |
+| 🎥 Video Consultation Module   | 1:1 high-quality video call system               |
+| 📊 Admin Analytics Dashboard   | Graphs, reports, and user statistics             |
+| 📧 Email or OTP Login          | Secure alternatives to password login            |
+| ✅ Doctor Approval Flow        | Admin must approve before doctor goes live       |
+| 💳 Payment Integration         | Online consultation fee via Stripe/Razorpay      |
+| 🌐 Multi-language Support      | Support for EN, URDU, and more                   |
 
-| 📁 Collection    | 🧩 Fields                                             |
-|------------------|------------------------------------------------------|
-| `/users`         | `uid`, `name`, `email`, `role: 'patient'`            |
-| `/doctors`       | `uid`, `name`, `specialization`, `availabilities`, `rating` |
-| `/appointments`  | `patientID`, `doctorID`, `time`, `status`            |
-| `/prescriptions` | `doctorID`, `patientID`, `note`, `fileURL`           |
-| `/reports`       | `patientID`, `fileURL`, `type`                       |
-| `/notifications` | `toUserID`, `title`, `message`                       |
+## 🗂️ Project Structure
 
-
-🔄 Appointment Flow – End-to-End Example
-
-1. 👤 Patient logs into the app  
-2. 🧑‍⚕️ Selects a doctor and sees available time slots  
-3. 📅 Books an appointment → saved to `/appointments`  
-4. 👨‍⚕️ Doctor views appointment via Admin Panel  
-5. 📝 Doctor writes a prescription → stored in `/prescriptions`  
-6. 📲 Patient receives push notification and views it in-app  
-
-
-🧰 Tools & Tech Stack
-
-| 📌 Area             | 🔧 Tool                                      |
-|---------------------|----------------------------------------------|
-| Mobile App          | React Native CLI + Firebase                  |
-| Admin Panel         | React.js / Next.js                           |
-| UI Components       | React Native Paper / Tailwind / Material UI  |
-| Authentication      | Firebase Auth                                |
-| Realtime Database   | Firebase Firestore                           |
-| File Storage        | Firebase Storage                             |
-| Notifications       | Expo Notifications / Firebase Cloud Messaging (FCM) |
-| Forms & Validation  | Formik + Yup / React Hook Form               |
-| Deployment          | Vercel (Web) / Android & iOS Testing         |
-
-
-🚀 Upcoming Enhancements
-
-- 🌐 Multi-language support (i18n)
-- 🔄 Firestore real-time listeners
-- 📊 Super Admin analytics dashboard
-- 💬 In-app Chat (Patient ↔ Doctor)
-- 🤖 AI-based medicine and reminder suggestions
-
-
-📚 Educational Takeaways
-
-By building this project, developers will:
-
-- 🔐 Implement role-based authentication & protected routes
-- 🔄 Work with real-time Firestore syncing & updates
-- 🧩 Explore Firebase modular SDKs & cloud functions
-- 🎨 Craft responsive, pixel-perfect UIs across platforms
-- 🧪 Test workflows, debug logic, and simulate production flows
+mydoctor-app/
+├── assets/ # Static assets (images, icons)
+├── components/ # Reusable UI components
+│ ├── common/ # Generic components
+│ ├── doctor/ # Doctor-specific components
+│ └── patient/ # Patient-specific components
+├── config/ # App configuration
+├── context/ # React context providers
+├── navigation/ # App navigation
+│ ├── DoctorStack.js # Doctor navigation
+│ └── PatientStack.js # Patient navigation
+├── screens/ # App screens
+│ ├── auth/ # Authentication screens
+│ ├── doctor/ # Doctor screens
+│ └── patient/ # Patient screens
+├── services/ # Business logic
+│ ├── auth.js # Auth services
+│ ├── firestore.js # Database operations
+│ └── notification.js # Push notifications
+├── styles/ # Global styles
+└── utils/ # Helper functions
 
 
-> 💡 Note: This is an open-source learning project. Contributions and collaborations are highly welcome.  
-> Fork it, explore the code, and feel free to submit your pull requests!
+
+## 📥 Installation Guide
+
+### Prerequisites
+- Node.js (v14+)
+- npm/yarn
+- Expo CLI (if using Expo)
+- Firebase account
+
+### Setup Instructions
+1. Clone the repository:
+```bash
+git clone https://github.com/danishshabbir-dev/Doctor-Appointment-App.git
+cd Doctor-Appointment-App
+
+npm install
+# or
+yarn install
+
+npm run android
+
+🤝 Contributing
+Fork the project
+
+Create your feature branch (git checkout -b feature/AmazingFeature)
+
+Commit your changes (git commit -m 'Add some AmazingFeature')
+
+Push to the branch (git push origin feature/AmazingFeature)
+
+Open a Pull Request
+
+📄 License
+Distributed under the MIT License. See LICENSE for more information.
+
+✉️ Contact
+Danish Shabbir - danishshabbir.dev@gmail.com
+Project Link: https://github.com/danishshabbir-dev/Doctor-Appointment-App
+
+
+This comprehensive README includes:
+1. All features organized by role
+2. Complete tech stack details
+3. Project structure visualization
+4. Detailed installation instructions
+5. Contribution guidelines
+6. License and contact information
+
+The document is well-formatted for GitHub Markdown and provides everything a developer or user would need to understand and work with this project.
